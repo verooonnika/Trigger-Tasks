@@ -6,13 +6,8 @@ public class RestCallout {
     @future(callout=true)
     public static void sendRecord(List<Id> accountIds){
         
-        List<Account> accounts = [SELECT Name, Phone FROM Account WHERE Id IN: accountIds];
-        List<Account> accountsToSend = new List<Account>();
-        
-        for(Account account: accounts){
-            Account accountToSend = new Account(name = account.Name, External_Account_Id__c = account.Id);
-            accountsToSend.add(accountToSend);
-        }
+        List<Account> accounts = AccountHandler.getAccountsById(accountIds);
+        List<Account> accountsToSend = AccountHandler.createAccountsForRequest(accounts);
                 
         AccountCompositeRequest requestBody = new AccountCompositeRequest(accountsToSend);
         

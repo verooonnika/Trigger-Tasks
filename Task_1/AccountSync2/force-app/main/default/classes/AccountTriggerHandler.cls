@@ -7,6 +7,7 @@ public class AccountTriggerHandler {
                 accountIds.add(account.Id);
             }
         } 
+        
         if(!accountIds.isEmpty()){
             RestCallout.sendRecord(accountIds);
         }
@@ -16,16 +17,33 @@ public class AccountTriggerHandler {
     public void syncUpdateAccount(Map<Id, Account> oldAccounts, Map<Id, Account> newAccounts){
         Boolean isFromApi = String.valueOf(System.URL.getCurrentRequestUrl().getPath()).contains('composite');
         
-        List<Id> accountIds = new List<Id>();
-        for(Id accountId: newAccounts.keySet()){
-            Account oldAccount = oldAccounts.get(accountId);
-            Account newAccount = newAccounts.get(accountId);
-            if(oldAccount.Name != newAccount.Name && isFromApi == false){
-                accountIds.add(accountId);
-            }
-        } 
+        Set<Id> accountIds = new Set<Id>();
+        
+         String[] fieldsToCompare = new String[]{'Name', 'AccountNumber', 'Phone', 
+            'BillingCountry', 'BillingState', 'BillingCity', 'BillingStreet',
+            'BillingPostalCode', 'BillingLatitude', 'BillingLongitude', 'ShippingCountry',
+            'ShippingState', 'ShippingCity', 'ShippingStreet', 'ShippingPostalCode',
+            'ShippingLatitude', 'ShippingLongitude'
+            };
+        
+        if(isFromApi == false){
+            for(Id accountId: newAccounts.keySet()){
+                Account oldAccount = oldAccounts.get(accountId);
+                Account newAccount = newAccounts.get(accountId);
+                Boolean isFieldChanged = false; 
+                
+                for(String field : fieldsToCompare) {
+                    if((String)newAccount.get(field) != (String)oldAccount.get(field)) {
+                        accountIds.add(accountId);
+                    }
+                }
+                
+            } 
+        }
+        
         if(!accountIds.isEmpty()){
-            RestCallout.sendRecord(accountIds);
+            List<Id> accountsToUpdate = new List<Id>(accountIds);
+            RestCallout.sendRecord(accountsToUpdate);
         }
     }
     
