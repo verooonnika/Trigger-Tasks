@@ -15,8 +15,8 @@ public class AccountTriggerHandler {
     
     public void syncUpdateAccount(Map<Id, Account> oldAccounts, Map<Id, Account> newAccounts){
         Boolean isFromApi = String.valueOf(System.URL.getCurrentRequestUrl().getPath()).contains('composite');
-        List<Id> accountIds = new List<Id>();
         
+        List<Id> accountIds = new List<Id>();
         for(Id accountId: newAccounts.keySet()){
             Account oldAccount = oldAccounts.get(accountId);
             Account newAccount = newAccounts.get(accountId);
@@ -27,6 +27,21 @@ public class AccountTriggerHandler {
         if(!accountIds.isEmpty()){
             RestCallout.sendRecord(accountIds);
         }
+    }
+    
+    public void syncDeleteAccount(List<Account> deletedAccounts){
+        Boolean isFromApi = String.valueOf(System.URL.getCurrentRequestUrl().getPath()).contains('composite');
+        
+        List<Id> accountIds = new List<Id>();
+        for(Account account: deletedAccounts){
+            if(isFromApi == false){
+                accountIds.add(account.External_Account_Id__c);
+            }
+        } 
+        if(!accountIds.isEmpty()){
+            RestCallout.deleteRecord(accountIds);
+        }
+        
     }
     
 }

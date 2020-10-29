@@ -36,14 +36,20 @@ public class RestCallout {
     }
     
     @future(callout=true)
-    public static void deleteRecord(Id accountId){
-        Account account = [SELECT Id, Name, External_Account_Id__c FROM Account WHERE Id =: accountId LIMIT 1];
-        String finalEndPoint = SEND_RECORD_ENDPOINT + account.External_Account_Id__c;
+    public static void deleteRecord(List<Id> accountIds){
+        String finalEndPoint = 'callout:Account_Sync/services/data/v50.0/composite/sobjects?ids=';
         
+        for(Id accountId: accountIds){
+            finalEndPoint = finalEndpoint + accountId + ',';
+        }
+        
+        finalEndPoint = finalEndPoint.removeEnd(',');
+        
+        Http http = new Http();
         HttpRequest request = new HttpRequest();
         request.setEndpoint(finalEndPoint);
         request.setMethod('DELETE');
-        
+        HTTPResponse response = http.send(request);        
         
     }
     

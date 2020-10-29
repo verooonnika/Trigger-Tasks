@@ -12,13 +12,9 @@ trigger AccountTrigger on Account (after insert, before update, before delete) {
     
     if(Trigger.isDelete){
         for(Account account: Trigger.Old){
-            RestCallout.deleteRecord(account.Id);
+            handler.syncDeleteAccount(Trigger.old);
         }
         
     }
-    
-    
-    
-    
     
 }
