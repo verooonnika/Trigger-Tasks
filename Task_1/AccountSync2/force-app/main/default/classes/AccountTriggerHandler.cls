@@ -15,13 +15,11 @@ public class AccountTriggerHandler {
     
     public void syncUpdateAccount(Map<Id, Account> oldAccounts, Map<Id, Account> newAccounts){
         Boolean isFromApi = String.valueOf(System.URL.getCurrentRequestUrl().getPath()).contains('composite');
-        
         List<Id> accountIds = new List<Id>();
+        
         for(Id accountId: newAccounts.keySet()){
             Account oldAccount = oldAccounts.get(accountId);
-            System.debug(oldAccount);
             Account newAccount = newAccounts.get(accountId);
-            System.debug(newAccount);
             if(oldAccount.Name != newAccount.Name && isFromApi == false){
                 accountIds.add(accountId);
             }

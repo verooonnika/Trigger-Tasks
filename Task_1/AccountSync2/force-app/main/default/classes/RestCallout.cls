@@ -13,7 +13,7 @@ public class RestCallout {
             Account accountToSend = new Account(name = account.Name, External_Account_Id__c = account.Id);
             accountsToSend.add(accountToSend);
         }
-                
+        
         AccountCompositeRequest requestBody = new AccountCompositeRequest(accountsToSend);
         
         String finalEndPoint = SEND_RECORD_ENDPOINT + 'External_Account_Id__c' + '?_HttpMethod=PATCH';
