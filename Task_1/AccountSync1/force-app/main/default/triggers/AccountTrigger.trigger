@@ -11,9 +11,7 @@ trigger AccountTrigger on Account (after insert, before update, before delete) {
     }
     
     if(Trigger.isDelete){
-        for(Account account: Trigger.Old){
-            handler.syncDeleteAccount(Trigger.old);
-        }
+        handler.syncDeleteAccount(Trigger.old);
         
     }
     
