@@ -9,7 +9,7 @@ public class AccountTriggerHandler {
         } 
         
         if(!accountIds.isEmpty()){
-            RestCallout.sendRecord(accountIds);
+            System.enqueueJob(new SyncUpsertAccount(accountIds));
         }
         
     }
@@ -43,7 +43,8 @@ public class AccountTriggerHandler {
         
         if(!accountIds.isEmpty()){
             List<Id> accountsToUpdate = new List<Id>(accountIds);
-            RestCallout.sendRecord(accountsToUpdate);
+            System.enqueueJob(new SyncUpsertAccount(accountsToUpdate));
+
         }
     }
     
@@ -57,7 +58,8 @@ public class AccountTriggerHandler {
             }
         } 
         if(!accountIds.isEmpty()){
-            RestCallout.deleteRecord(accountIds);
+        	System.enqueueJob(new SyncDeleteAccount(accountIds));
+
         }
         
     }

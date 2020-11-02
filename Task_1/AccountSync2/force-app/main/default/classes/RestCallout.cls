@@ -3,7 +3,6 @@ public class RestCallout {
     private static final String SEND_RECORD_ENDPOINT = 'callout:Account_Sync/services/data/v50.0/composite/sobjects/Account/';
     
     //upsert
-    @future(callout=true)
     public static void sendRecord(List<Id> accountIds){
         
         List<Account> accounts = AccountHandler.getAccountsById(accountIds);
@@ -30,7 +29,6 @@ public class RestCallout {
         update accounts; 
     }
     
-    @future(callout=true)
     public static void deleteRecord(List<Id> accountIds){
         String finalEndPoint = 'callout:Account_Sync/services/data/v50.0/composite/sobjects?ids=';
         
