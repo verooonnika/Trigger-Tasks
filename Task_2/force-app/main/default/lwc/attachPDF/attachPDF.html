@@ -1,0 +1,11 @@
+<template>
+    <div class="spinner">
+    <template if:true={loading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <template if:false={loading}>
+        {message}
+    </template>
+</div>
+ 
+</template>
